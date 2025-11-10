@@ -1,5 +1,10 @@
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { ReactNode } from 'react';
+
+type RootLayoutProps = {
+  children: ReactNode;
+};
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -11,7 +16,7 @@ export const metadata = {
   viewport: 'width=device-width, initial-scale=1',
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="es">
       <head>
