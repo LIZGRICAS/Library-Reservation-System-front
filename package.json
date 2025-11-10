@@ -1,26 +1,47 @@
 {
   "name": "bibliotech-frontend",
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de biblioteca por correo electrónico con IA",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,md}\"",
+    "clean": "rm -rf .next out node_modules"
   },
   "dependencies": {
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "next": "16.0.1"
+    "axios": "^1.6.2",
+    "lucide-react": "^0.294.0",
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "16.0.1"
-  }
+    "@types/node": "24.10.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.56.0",
+    "eslint-config-next": "^14.0.4",
+    "postcss": "^8.5.6",
+    "prettier": "^3.1.1",
+    "tailwindcss": "^3.4.18"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "keywords": [
+    "biblioteca",
+    "email",
+    "IA",
+    "LLM",
+    "FastAPI",
+    "Next.js",
+    "React",
+    "automatización"
+  ],
+  "author": "Tu Nombre",
+  "license": "MIT"
 }
