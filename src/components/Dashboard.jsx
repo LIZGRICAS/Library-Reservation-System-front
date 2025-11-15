@@ -1,4 +1,4 @@
-// src/components/Dashboard.jsx
+
 'use client';
 
 import { useEffect } from 'react';

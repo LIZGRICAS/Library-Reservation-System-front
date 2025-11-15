@@ -1,9 +1,9 @@
-// src/lib/axios.js
+
 import axios from 'axios';
 
 // Crear instancia de Axios con configuración base
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1',
   timeout: 30000, // 30 segundos
   headers: {
     'Content-Type': 'application/json',

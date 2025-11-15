@@ -1,16 +1,15 @@
-// src/components/Navbar.jsx
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Mail, Activity, Inbox, BookOpen, Send, Menu, X, RefreshCw, LogIn, LogOut, User } from 'lucide-react';
+import { Mail, Activity, Inbox, BookOpen, Send, Menu, X, RefreshCw, LogIn, LogOut } from 'lucide-react';
 import useStore from '@/store/useStore';
-import AuthModal from './AuthModal';
+import { useRouter } from 'next/navigation'; // ← CORRECTO en Next.js 13/14
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const { activeTab, setActiveTab, refreshAll, user, isAuthenticated, logout, checkAuth } = useStore();
+  const { activeTab, setActiveTab, refreshAll, isAuthenticated, logout, checkAuth } = useStore();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const router = useRouter(); // ← Ya no da error
 
   useEffect(() => {
     checkAuth();
@@ -31,7 +30,12 @@ export default function Navbar() {
     if (window.confirm('¿Estás seguro de cerrar sesión?')) {
       logout();
       alert('✅ Sesión cerrada exitosamente');
+      router.push('/login'); // ← Redirección correcta
     }
+  };
+
+  const handleLoginRedirect = () => {
+    router.push('/login');
   };
 
   const tabs = [
@@ -58,7 +62,8 @@ export default function Navbar() {
                 </p>
               </div>
             </div>
-            
+
+            {/* Right-side actions */}
             <div className="flex items-center space-x-2 sm:space-x-4">
               <button
                 onClick={handleRefresh}
@@ -68,11 +73,30 @@ export default function Navbar() {
                 <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
                 <span className="hidden sm:inline">Actualizar</span>
               </button>
-              
+
               <div className="hidden md:flex items-center space-x-2 px-3 sm:px-4 py-2 bg-green-100 rounded-lg">
                 <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
                 <span className="text-sm font-semibold text-green-600">Sistema Activo</span>
               </div>
+
+              {/* Login / Logout button */}
+              {isAuthenticated ? (
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>Cerrar sesión</span>
+                </button>
+              ) : (
+                <button
+                  onClick={handleLoginRedirect}
+                  className="flex items-center space-x-2 px-3 sm:px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <LogIn className="w-5 h-5" />
+                  <span>Iniciar sesión</span>
+                </button>
+              )}
 
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

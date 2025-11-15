@@ -1,4 +1,4 @@
-// src/lib/api.js
+
 import axios from './axios';
 
 // ===================================
@@ -82,10 +82,12 @@ export const emailsAPI = {
 // ===================================
 export const booksAPI = {
   // Obtener lista de libros con paginación
-  getBooks: async (params = { limit: 10, offset: 0, query: null }) => {
+  getBooks: async (params = { limit: 12, offset: 0, query: null }) => {
     try {
       const response = await axios.get('/books', { params });
-      return response.data;
+      
+      console.log(response, 'response')
+      return response;
     } catch (error) {
       console.error('Error getting books:', error);
       throw error;
@@ -96,7 +98,7 @@ export const booksAPI = {
   getBookById: async (id) => {
     try {
       const response = await axios.get(`/books/${id}`);
-      return response.data;
+      return response.data.data;
     } catch (error) {
       console.error('Error getting book:', error);
       throw error;
@@ -107,7 +109,7 @@ export const booksAPI = {
   createBook: async (bookData) => {
     try {
       const response = await axios.post('/books', bookData);
-      return response.data;
+      return response.data.data;
     } catch (error) {
       console.error('Error creating book:', error);
       throw error;
@@ -118,7 +120,8 @@ export const booksAPI = {
   updateBook: async (id, bookData) => {
     try {
       const response = await axios.put(`/books/${id}`, bookData);
-      return response.data;
+      console.log(response, 'response')
+      return response.data.data;
     } catch (error) {
       console.error('Error updating book:', error);
       throw error;
@@ -129,7 +132,7 @@ export const booksAPI = {
   deleteBook: async (id) => {
     try {
       const response = await axios.delete(`/books/${id}`);
-      return response.data;
+      return response.data.data;
     } catch (error) {
       console.error('Error deleting book:', error);
       throw error;
@@ -299,6 +302,7 @@ export const usersAPI = {
       const response = await axios.post('/users/register', userData, {
         params: { role }
       });
+      console.log(response.data)
       return response.data;
     } catch (error) {
       console.error('Error registering user:', error);

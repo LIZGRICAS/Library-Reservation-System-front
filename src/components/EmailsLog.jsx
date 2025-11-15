@@ -1,4 +1,4 @@
-// src/components/EmailsLog.jsx
+
 'use client';
 
 import { useEffect, useState } from 'react';
