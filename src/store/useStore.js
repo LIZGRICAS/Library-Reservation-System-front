@@ -1,3 +1,4 @@
+// src/store/useStore.js
 import { create } from 'zustand';
 import { 
   statsAPI, 
@@ -43,6 +44,11 @@ const useStore = create((set, get) => ({
   reservations: [],
   reservationsLoading: false,
   reservationsError: null,
+  
+  // Autenticación
+  user: null,
+  token: null,
+  isAuthenticated: false,
   
   // UI
   activeTab: 'dashboard',
@@ -292,11 +298,106 @@ const useStore = create((set, get) => ({
   
   sendRecommendations: async (email, category) => {
     try {
-      const response = await recommendationsAPI.sendRecommendations(email, category);
+      const response = await recommendationsAPI.sendRecommendationsByEmail(category, email);
       return response;
     } catch (error) {
       console.error('Error sending recommendations:', error);
       throw error;
+    }
+  },
+  
+  getLLMRecommendations: async (category, limit = 5) => {
+    try {
+      const response = await recommendationsAPI.getLLMRecommendations(category, limit);
+      return response;
+    } catch (error) {
+      console.error('Error getting LLM recommendations:', error);
+      throw error;
+    }
+  },
+  
+  getLibraryRecommendations: async (category, limit = 5) => {
+    try {
+      const response = await recommendationsAPI.getLibraryRecommendations(category, limit);
+      return response;
+    } catch (error) {
+      console.error('Error getting library recommendations:', error);
+      throw error;
+    }
+  },
+  
+  getCombinedRecommendations: async (category, limit = 5) => {
+    try {
+      const response = await recommendationsAPI.getCombinedRecommendations(category, limit);
+      return response;
+    } catch (error) {
+      console.error('Error getting combined recommendations:', error);
+      throw error;
+    }
+  },
+  
+  // ===================================
+  // 🔐 ACCIONES - AUTENTICACIÓN
+  // ===================================
+  
+  login: async (email, password) => {
+    try {
+      const response = await usersAPI.login({ email, password });
+      const { access_token } = response;
+      
+      // Guardar token
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('access_token', access_token);
+      }
+      
+      // Obtener datos del usuario
+      const userData = await usersAPI.getCurrentUser();
+      
+      set({ 
+        user: userData,
+        token: access_token,
+        isAuthenticated: true 
+      });
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error logging in:', error);
+      return { success: false, error: error.message };
+    }
+  },
+  
+  logout: () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user');
+    }
+    set({ 
+      user: null,
+      token: null,
+      isAuthenticated: false 
+    });
+  },
+  
+  checkAuth: async () => {
+    if (typeof window === 'undefined') return;
+    
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      set({ isAuthenticated: false, user: null, token: null });
+      return;
+    }
+    
+    try {
+      const userData = await usersAPI.getCurrentUser();
+      set({ 
+        user: userData,
+        token,
+        isAuthenticated: true 
+      });
+    } catch (error) {
+      console.error('Error checking auth:', error);
+      localStorage.removeItem('access_token');
+      set({ isAuthenticated: false, user: null, token: null });
     }
   },
   

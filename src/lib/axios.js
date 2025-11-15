@@ -1,22 +1,25 @@
+// src/lib/axios.js
 import axios from 'axios';
 
 // Crear instancia de Axios con configuración base
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api',
   timeout: 30000, // 30 segundos
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Interceptor para requests - Agregar token si existe
+// Interceptor para requests - Agregar token JWT si existe
 axiosInstance.interceptors.request.use(
   (config) => {
-    // Aquí puedes agregar tokens de autenticación si los necesitas
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    // Obtener token del localStorage (solo en cliente)
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
     
     console.log(`🚀 Request: ${config.method.toUpperCase()} ${config.url}`);
     return config;

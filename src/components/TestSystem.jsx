@@ -73,9 +73,9 @@ export default function TestSystem() {
 
     setIsLoading(true);
     try {
-      await sendRecommendations(recommendForm.email, recommendForm.category);
+      const response = await sendRecommendations(recommendForm.email, recommendForm.category);
       alert(
-        `✅ Solicitud de recomendaciones enviada para: ${recommendForm.category}\nRecibirás un correo con las recomendaciones pronto.`
+        `✅ ${response.message || 'Solicitud de recomendaciones enviada'}\nRecibirás un correo con ${response.recommendations_count || 5} recomendaciones pronto.`
       );
       setRecommendForm({ email: '', category: '' });
     } catch (error) {

@@ -1,13 +1,20 @@
+// src/components/Navbar.jsx
 'use client';
 
-import { useState } from 'react';
-import { Mail, Activity, Inbox, BookOpen, Send, Menu, X, RefreshCw } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Mail, Activity, Inbox, BookOpen, Send, Menu, X, RefreshCw, LogIn, LogOut, User } from 'lucide-react';
 import useStore from '@/store/useStore';
+import AuthModal from './AuthModal';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { activeTab, setActiveTab, refreshAll } = useStore();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { activeTab, setActiveTab, refreshAll, user, isAuthenticated, logout, checkAuth } = useStore();
   const [isRefreshing, setIsRefreshing] = useState(false);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -17,6 +24,13 @@ export default function Navbar() {
       console.error('Error refreshing:', error);
     } finally {
       setTimeout(() => setIsRefreshing(false), 1000);
+    }
+  };
+
+  const handleLogout = () => {
+    if (window.confirm('¿Estás seguro de cerrar sesión?')) {
+      logout();
+      alert('✅ Sesión cerrada exitosamente');
     }
   };
 
